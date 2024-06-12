@@ -1,35 +1,33 @@
-import {
-  Approval as ApprovalEvent,
-  Transfer as TransferEvent
-} from "../generated/XID/XID"
-import { Approval, Transfer } from "../generated/schema"
+import { Mint, Burn } from "../generated/XID/XID"
+import { User, XIDToken } from "../generated/schema"
 
-export function handleApproval(event: ApprovalEvent): void {
-  let entity = new Approval(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.owner = event.params.owner
-  entity.spender = event.params.spender
-  entity.value = event.params.value
+export function handleMint(event: Mint): void {
+  let user = User.load(event.params.user.toHex())
+  if (user == null) {
+    user = new User(event.params.user.toHex())
+    user.address = event.params.user
+  }
+  user.username = event.params.username
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  let xidToken = new XIDToken(event.params.tokenId.toHex())
+  xidToken.tokenId = event.params.tokenId
+  xidToken.owner = user.id
+  xidToken.username = event.params.username
 
-  entity.save()
+  user.xidToken = xidToken.id
+  user.save()
+  xidToken.save()
 }
 
-export function handleTransfer(event: TransferEvent): void {
-  let entity = new Transfer(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.from = event.params.from
-  entity.to = event.params.to
-  entity.value = event.params.value
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
+// export function handleBurn(event: Burn): void {
+//   let xidToken = XIDToken.load(event.params.tokenId.toHex())
+//   if (xidToken != null) {
+//     let user = User.load(xidToken.owner)
+//     if (user != null) {
+//       user.username = null
+//       user.xidToken = null
+//       user.save()
+//     }
+//     xidToken.remove()
+//   }
+// }

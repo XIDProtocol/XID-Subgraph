@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: XID
-    network: mainnet
+    network: sepolia
     source:
-      address: "<XID_CONTRACT_ADDRESS>"
+      address: "0xf2658118FD405Ca4fD98c5578EC09540C4C4dCA7"
       abi: XID
-      startBlock: <START_BLOCK>
+      startBlock: 6091925
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -20,32 +20,26 @@ dataSources:
         - name: XID
           file: ./abis/XID.json
       eventHandlers:
-        - event: Mint(address,uint256,string)
+        - event: Mint(indexed address,indexed uint256,string)
           handler: handleMint
-        - event: Burn(address,uint256,string)
-          handler: handleBurn
       file: ./src/xid.ts
 
-  - kind: ethereum/contract
-    name: XIDController
-    network: mainnet
-    source:
-      address: "<XID_CONTROLLER_CONTRACT_ADDRESS>"
-      abi: XIDController
-      startBlock: <START_BLOCK>
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      entities:
-        - User
-        - XIDToken
-      abis:
-        - name: XIDController
-          file: ./abis/XIDController.json
-      eventHandlers:
-        - event: SignerChanged(address,address)
-          handler: handleSignerChanged
-        - event: MintFeeChanged(uint256,uint256)
-          handler: handleMintFeeChanged
-      file: ./src/xidController.ts
+  # - kind: ethereum/contract
+  #   name: XIDController
+  #   network: mainnet
+  #   source:
+  #     address: "0x222200e228B4A39dcF856Cf376e54aa34f019dc2"
+  #     abi: XIDController
+  #     startBlock: 6091428
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.6
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - User
+  #       - XIDToken
+  #     abis:
+  #       - name: XIDController
+  #         file: ./abis/XIDController.json
+  #     eventHandlers:
+  #     file: ./src/xidController.ts

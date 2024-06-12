@@ -1,0 +1,25 @@
+specVersion: 0.0.4
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: XID
+    network: sepolia
+    source:
+      address: "0xf2658118FD405Ca4fD98c5578EC09540C4C4dCA7"
+      abi: XID
+      startBlock: 6091428
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - XIDToken
+      abis:
+        - name: XID
+          file: XID/abis/XID.json
+      eventHandlers:
+        - event: Mint(indexed address,indexed uint256,string)
+          handler: handleMint
+      file: XID/XID.wasm
