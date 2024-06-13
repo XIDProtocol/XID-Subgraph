@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0xf2658118FD405Ca4fD98c5578EC09540C4C4dCA7"
       abi: XID
-      startBlock: 6091428
+      startBlock: 6091925
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -22,4 +22,6 @@ dataSources:
       eventHandlers:
         - event: Mint(indexed address,indexed uint256,string)
           handler: handleMint
+        - event: Burn(indexed address,indexed uint256,string)
+          handler: handleBurn
       file: XID/XID.wasm

@@ -22,8 +22,10 @@ dataSources:
       eventHandlers:
         - event: Mint(indexed address,indexed uint256,string)
           handler: handleMint
-      file: ./src/xid.ts
+        - event: Burn(indexed address,indexed uint256,string)
+          handler: handleBurn
 
+      file: ./src/xid.ts
   # - kind: ethereum/contract
   #   name: XIDController
   #   network: mainnet

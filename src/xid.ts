@@ -1,6 +1,8 @@
 import { Mint, Burn } from "../generated/XID/XID"
 import { User, XIDToken } from "../generated/schema"
+import { store } from "@graphprotocol/graph-ts"
 
+// Mint event handler
 export function handleMint(event: Mint): void {
   let user = User.load(event.params.user.toHex())
   if (user == null) {
@@ -19,15 +21,16 @@ export function handleMint(event: Mint): void {
   xidToken.save()
 }
 
-// export function handleBurn(event: Burn): void {
-//   let xidToken = XIDToken.load(event.params.tokenId.toHex())
-//   if (xidToken != null) {
-//     let user = User.load(xidToken.owner)
-//     if (user != null) {
-//       user.username = null
-//       user.xidToken = null
-//       user.save()
-//     }
-//     xidToken.remove()
-//   }
-// }
+// Burn event handler
+export function handleBurn(event: Burn): void {
+  let xidToken = XIDToken.load(event.params.tokenId.toHex())
+  if (xidToken != null) {
+    let user = User.load(xidToken.owner)
+    if (user != null) {
+      user.username = null
+      user.xidToken = null
+      user.save()
+    }
+    store.remove('XIDToken', xidToken.id)
+  }
+}
