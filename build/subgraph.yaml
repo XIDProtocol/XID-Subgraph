@@ -6,9 +6,9 @@ dataSources:
     name: XID
     network: sepolia
     source:
-      address: "0xf2658118FD405Ca4fD98c5578EC09540C4C4dCA7"
+      address: "0x6b2E0Fc9435C6001A4b41A86649E2D35cb274ba9"
       abi: XID
-      startBlock: 6091925
+      startBlock: 6100093
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

@@ -27,9 +27,9 @@ export function handleBurn(event: Burn): void {
   if (xidToken != null) {
     let user = User.load(xidToken.owner)
     if (user != null) {
-      user.username = null
-      user.xidToken = null
-      user.save()
+      // user.username = null
+      // user.xidToken = null
+      store.remove('User', user.id)
     }
     store.remove('XIDToken', xidToken.id)
   }
