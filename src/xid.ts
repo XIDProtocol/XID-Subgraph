@@ -2,13 +2,15 @@ import { Mint, Burn } from "../generated/XID/XID"
 import { User, XIDToken } from "../generated/schema"
 import { store } from "@graphprotocol/graph-ts"
 
+
+// FIXME: tokenId 和 Id 问题
 // Mint event handler
 export function handleMint(event: Mint): void {
   let user = User.load(event.params.user.toHex())
   if (user == null) {
     user = new User(event.params.user.toHex())
     user.address = event.params.user
-  }
+  } 
   user.username = event.params.username
 
   let xidToken = new XIDToken(event.params.tokenId.toHex())
