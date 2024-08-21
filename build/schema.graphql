@@ -10,4 +10,11 @@ type XIDToken @entity {
   tokenId: BigInt!
   owner: User!
   username: String!
+  expirationTime: BigInt!
+  isValid: Boolean!
+}
+
+type GlobalState @entity {
+  id: ID!
+  lastCheckTime: BigInt!
 }

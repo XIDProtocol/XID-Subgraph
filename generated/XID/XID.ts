@@ -112,6 +112,10 @@ export class Mint__Params {
   get username(): string {
     return this._event.parameters[2].value.toString();
   }
+
+  get expirationTime(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
 }
 
 export class OwnershipTransferred extends ethereum.Event {
@@ -133,6 +137,50 @@ export class OwnershipTransferred__Params {
 
   get newOwner(): Address {
     return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class RegistrationCheckToggled extends ethereum.Event {
+  get params(): RegistrationCheckToggled__Params {
+    return new RegistrationCheckToggled__Params(this);
+  }
+}
+
+export class RegistrationCheckToggled__Params {
+  _event: RegistrationCheckToggled;
+
+  constructor(event: RegistrationCheckToggled) {
+    this._event = event;
+  }
+
+  get enabled(): boolean {
+    return this._event.parameters[0].value.toBoolean();
+  }
+}
+
+export class RegistrationRenewed extends ethereum.Event {
+  get params(): RegistrationRenewed__Params {
+    return new RegistrationRenewed__Params(this);
+  }
+}
+
+export class RegistrationRenewed__Params {
+  _event: RegistrationRenewed;
+
+  constructor(event: RegistrationRenewed) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get newExpirationTime(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get renewalYears(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -268,6 +316,31 @@ export class XID extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  getRegistrationExpirationTime(tokenId: BigInt): BigInt {
+    let result = super.call(
+      "getRegistrationExpirationTime",
+      "getRegistrationExpirationTime(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getRegistrationExpirationTime(
+    tokenId: BigInt,
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getRegistrationExpirationTime",
+      "getRegistrationExpirationTime(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   getTokenIdByAddress(user: Address): BigInt {
     let result = super.call(
       "getTokenIdByAddress",
@@ -386,6 +459,29 @@ export class XID extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  isRegistrationValid(tokenId: BigInt): boolean {
+    let result = super.call(
+      "isRegistrationValid",
+      "isRegistrationValid(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isRegistrationValid(tokenId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isRegistrationValid",
+      "isRegistrationValid(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   name(): string {
     let result = super.call("name", "name():(string)", []);
 
@@ -433,6 +529,52 @@ export class XID extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  registrationCheckEnabled(): boolean {
+    let result = super.call(
+      "registrationCheckEnabled",
+      "registrationCheckEnabled():(bool)",
+      [],
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_registrationCheckEnabled(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "registrationCheckEnabled",
+      "registrationCheckEnabled():(bool)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  registrationDuration(): BigInt {
+    let result = super.call(
+      "registrationDuration",
+      "registrationDuration():(uint256)",
+      [],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_registrationDuration(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "registrationDuration",
+      "registrationDuration():(uint256)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   supportsInterface(interfaceId: Bytes): boolean {
@@ -607,12 +749,50 @@ export class MintCall__Inputs {
   get githubUsername(): string {
     return this._call.inputValues[1].value.toString();
   }
+
+  get registrationYears(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
 }
 
 export class MintCall__Outputs {
   _call: MintCall;
 
   constructor(call: MintCall) {
+    this._call = call;
+  }
+}
+
+export class RenewCall extends ethereum.Call {
+  get inputs(): RenewCall__Inputs {
+    return new RenewCall__Inputs(this);
+  }
+
+  get outputs(): RenewCall__Outputs {
+    return new RenewCall__Outputs(this);
+  }
+}
+
+export class RenewCall__Inputs {
+  _call: RenewCall;
+
+  constructor(call: RenewCall) {
+    this._call = call;
+  }
+
+  get tokenId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get renewalYears(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class RenewCall__Outputs {
+  _call: RenewCall;
+
+  constructor(call: RenewCall) {
     this._call = call;
   }
 }
@@ -783,6 +963,66 @@ export class SetControllerCall__Outputs {
   _call: SetControllerCall;
 
   constructor(call: SetControllerCall) {
+    this._call = call;
+  }
+}
+
+export class SetRegistrationCheckEnabledCall extends ethereum.Call {
+  get inputs(): SetRegistrationCheckEnabledCall__Inputs {
+    return new SetRegistrationCheckEnabledCall__Inputs(this);
+  }
+
+  get outputs(): SetRegistrationCheckEnabledCall__Outputs {
+    return new SetRegistrationCheckEnabledCall__Outputs(this);
+  }
+}
+
+export class SetRegistrationCheckEnabledCall__Inputs {
+  _call: SetRegistrationCheckEnabledCall;
+
+  constructor(call: SetRegistrationCheckEnabledCall) {
+    this._call = call;
+  }
+
+  get enabled(): boolean {
+    return this._call.inputValues[0].value.toBoolean();
+  }
+}
+
+export class SetRegistrationCheckEnabledCall__Outputs {
+  _call: SetRegistrationCheckEnabledCall;
+
+  constructor(call: SetRegistrationCheckEnabledCall) {
+    this._call = call;
+  }
+}
+
+export class SetRegistrationDurationCall extends ethereum.Call {
+  get inputs(): SetRegistrationDurationCall__Inputs {
+    return new SetRegistrationDurationCall__Inputs(this);
+  }
+
+  get outputs(): SetRegistrationDurationCall__Outputs {
+    return new SetRegistrationDurationCall__Outputs(this);
+  }
+}
+
+export class SetRegistrationDurationCall__Inputs {
+  _call: SetRegistrationDurationCall;
+
+  constructor(call: SetRegistrationDurationCall) {
+    this._call = call;
+  }
+
+  get newDuration(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class SetRegistrationDurationCall__Outputs {
+  _call: SetRegistrationDurationCall;
+
+  constructor(call: SetRegistrationDurationCall) {
     this._call = call;
   }
 }
