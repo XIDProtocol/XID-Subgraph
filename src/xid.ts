@@ -1,5 +1,5 @@
 import { Mint, Burn, RegistrationRenewed } from "../generated/XID/XID"
-import { User, XIDToken, GlobalState } from "../generated/schema"
+import { User, XIDToken} from "../generated/schema"
 import { store, BigInt } from "@graphprotocol/graph-ts"
 import { XID } from "../generated/XID/XID"
 
@@ -23,7 +23,7 @@ export function handleMint(event: Mint): void {
 }
 
 export function handleBurn(event: Burn): void {
-  let xidToken = XIDToken.load(event.params.tokenId.toHex())
+  let xidToken = XIDToken.load(event.params.tokenId.toHexString())
   if (xidToken != null) {
     let user = User.load(xidToken.owner)
     if (user != null) {
@@ -31,7 +31,6 @@ export function handleBurn(event: Burn): void {
     }
     store.remove('XIDToken', xidToken.id)
   }
-
 }
 
 export function handleRegistrationRenewed(event: RegistrationRenewed): void {

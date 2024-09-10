@@ -63,38 +63,30 @@ export class User extends Entity {
     this.set("address", Value.fromBytes(value));
   }
 
-  get username(): string | null {
+  get username(): string {
     let value = this.get("username");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toString();
     }
   }
 
-  set username(value: string | null) {
-    if (!value) {
-      this.unset("username");
-    } else {
-      this.set("username", Value.fromString(<string>value));
-    }
+  set username(value: string) {
+    this.set("username", Value.fromString(value));
   }
 
-  get xidToken(): string | null {
+  get xidToken(): string {
     let value = this.get("xidToken");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toString();
     }
   }
 
-  set xidToken(value: string | null) {
-    if (!value) {
-      this.unset("xidToken");
-    } else {
-      this.set("xidToken", Value.fromString(<string>value));
-    }
+  set xidToken(value: string) {
+    this.set("xidToken", Value.fromString(value));
   }
 }
 
@@ -187,73 +179,5 @@ export class XIDToken extends Entity {
 
   set expirationTime(value: BigInt) {
     this.set("expirationTime", Value.fromBigInt(value));
-  }
-
-  get isValid(): boolean {
-    let value = this.get("isValid");
-    if (!value || value.kind == ValueKind.NULL) {
-      return false;
-    } else {
-      return value.toBoolean();
-    }
-  }
-
-  set isValid(value: boolean) {
-    this.set("isValid", Value.fromBoolean(value));
-  }
-}
-
-export class GlobalState extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save GlobalState entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type GlobalState must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
-      );
-      store.set("GlobalState", id.toString(), this);
-    }
-  }
-
-  static loadInBlock(id: string): GlobalState | null {
-    return changetype<GlobalState | null>(
-      store.get_in_block("GlobalState", id),
-    );
-  }
-
-  static load(id: string): GlobalState | null {
-    return changetype<GlobalState | null>(store.get("GlobalState", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get lastCheckTime(): BigInt {
-    let value = this.get("lastCheckTime");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set lastCheckTime(value: BigInt) {
-    this.set("lastCheckTime", Value.fromBigInt(value));
   }
 }

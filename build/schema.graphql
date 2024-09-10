@@ -1,8 +1,8 @@
 type User @entity {
   id: ID!
   address: Bytes!
-  username: String
-  xidToken: XIDToken
+  username: String!
+  xidToken: XIDToken!
 }
 
 type XIDToken @entity {
@@ -11,10 +11,4 @@ type XIDToken @entity {
   owner: User!
   username: String!
   expirationTime: BigInt!
-  isValid: Boolean!
-}
-
-type GlobalState @entity {
-  id: ID!
-  lastCheckTime: BigInt!
 }
