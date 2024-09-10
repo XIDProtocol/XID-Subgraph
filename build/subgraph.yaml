@@ -20,8 +20,8 @@ dataSources:
         - name: XID
           file: XID/abis/XID.json
       eventHandlers:
-        - event: Mint(indexed address,indexed uint256,string, uint256)
+        - event: Mint(indexed address,indexed uint256,string,uint256)
           handler: handleMint
-        - event: Burn(indexed address,indexed uint256,string, uint256)
+        - event: Burn(indexed address,indexed uint256,string)
           handler: handleBurn
       file: XID/XID.wasm
