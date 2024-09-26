@@ -4,18 +4,19 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: XID
-    network: sepolia
+    # network: sepolia
+    network: base-sepolia
     source:
-      address: "0xcd19Be65ccBDbdC1dD2dA3323d4f9cdDB2c8699B"
+      address: "0xaCbe0D8997B824942661363B97d3bB49778c8C46"
       abi: XID
-      startBlock: 6666433
+      startBlock: 15787789
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - User
-        - XIDToken
+        - XIDToken  
       abis:
         - name: XID
           file: ./abis/XID.json
