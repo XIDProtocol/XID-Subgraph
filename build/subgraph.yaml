@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: XID
-    network: base-sepolia
+    network: base
     source:
-      address: "0xaCbe0D8997B824942661363B97d3bB49778c8C46"
+      address: "0x6a4f7BBACd0d62D586342A938e2d680814e14f0B"
       abi: XID
-      startBlock: 15787789
+      startBlock: 20279083
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
