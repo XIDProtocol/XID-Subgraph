@@ -88,6 +88,14 @@ export class User extends Entity {
   set xidToken(value: string) {
     this.set("xidToken", Value.fromString(value));
   }
+
+  get vaultBalances(): VaultBalanceLoader {
+    return new VaultBalanceLoader(
+      "User",
+      this.get("id")!.toString(),
+      "vaultBalances",
+    );
+  }
 }
 
 export class XIDToken extends Entity {
@@ -179,5 +187,117 @@ export class XIDToken extends Entity {
 
   set expirationTime(value: BigInt) {
     this.set("expirationTime", Value.fromBigInt(value));
+  }
+}
+
+export class VaultBalance extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save VaultBalance entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type VaultBalance must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("VaultBalance", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): VaultBalance | null {
+    return changetype<VaultBalance | null>(
+      store.get_in_block("VaultBalance", id),
+    );
+  }
+
+  static load(id: string): VaultBalance | null {
+    return changetype<VaultBalance | null>(store.get("VaultBalance", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get owner(): string {
+    let value = this.get("owner");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set owner(value: string) {
+    this.set("owner", Value.fromString(value));
+  }
+
+  get token(): Bytes {
+    let value = this.get("token");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set token(value: Bytes) {
+    this.set("token", Value.fromBytes(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get lastUpdatedAt(): BigInt {
+    let value = this.get("lastUpdatedAt");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set lastUpdatedAt(value: BigInt) {
+    this.set("lastUpdatedAt", Value.fromBigInt(value));
+  }
+}
+
+export class VaultBalanceLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): VaultBalance[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<VaultBalance[]>(value);
   }
 }

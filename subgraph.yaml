@@ -17,7 +17,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - User
-        - XIDToken  
+        - XIDToken
       abis:
         - name: XID
           file: ./abis/XID.json
@@ -28,24 +28,32 @@ dataSources:
           handler: handleBurn
         - event: RegistrationRenewed(indexed uint256,uint256,uint256)
           handler: handleRegistrationRenewed
+      file: ./src/XID.ts
 
-      file: ./src/xid.ts
-  # - kind: ethereum/contract
-  #   name: XIDController
-  #   network: mainnet
-  #   source:
-  #     address: "0x222200e228B4A39dcF856Cf376e54aa34f019dc2"
-  #     abi: XIDController
-  #     startBlock: 6091428
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.6
-  #     language: wasm/assemblyscript
-  #     entities:
-  #       - User
-  #       - XIDToken
-  #     abis:
-  #       - name: XIDController
-  #         file: ./abis/XIDController.json
-  #     eventHandlers:
-  #     file: ./src/xidController.ts
+  - kind: ethereum/contract
+    name: XVault
+    network: base
+    source:
+      address: "0x6a4f7BBACd0d62D586342A938e2d680814e14f0B" # 替换为实际的 XVault 合约地址
+      abi: XVault
+      startBlock: 20279083 # 替换为实际的部署区块
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - VaultBalance
+      abis:
+        - name: XVault
+          file: ./abis/XVault.json
+      eventHandlers:
+        - event: EthDeposited(indexed string,uint256)
+          handler: handleEthDeposited
+        - event: EthWithdrawn(indexed string,address,uint256)
+          handler: handleEthWithdrawn
+        - event: TokenDeposited(indexed string,address,uint256)
+          handler: handleTokenDeposited
+        - event: TokenWithdrawn(indexed string,address,address,uint256)
+          handler: handleTokenWithdrawn
+      file: ./src/XVault.ts
