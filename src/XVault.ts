@@ -13,7 +13,11 @@ function getVaultBalanceId(username: string, token: Bytes): string {
 }
 
 export function handleEthDeposited(event: EthDeposited): void {
-  let balanceId = event.params.username
+  let balanceId = getVaultBalanceId(
+    event.params.username,
+    Bytes.fromHexString("0x0000000000000000000000000000000000000000")
+  )
+  
   
   let balance = VaultBalance.load(balanceId)
   if (!balance) {
@@ -33,7 +37,11 @@ export function handleEthDeposited(event: EthDeposited): void {
 }
 
 export function handleEthWithdrawn(event: EthWithdrawn): void {
-  let balanceId = event.params.username
+  let balanceId = getVaultBalanceId(
+    event.params.username,
+    Bytes.fromHexString("0x0000000000000000000000000000000000000000")
+  )
+  
 
   let balance = VaultBalance.load(balanceId)
   
@@ -87,14 +95,10 @@ export function handleTokenWithdrawn(event: TokenWithdrawn): void {
 
   let balance = VaultBalance.load(balanceId)
   if (balance) {
-    balance.amount = balance.amount.minus(event.params.amount)
+    balance.amount = BigInt.fromI32(0)
     balance.lastUpdatedAt = event.block.timestamp
 
-    if (balance.amount.equals(BigInt.fromI32(0))) {
-      store.remove("VaultBalance", balanceId)
-    } else {
-      balance.save()
-    }
+    store.remove("VaultBalance", balanceId)
   }
 }
 
