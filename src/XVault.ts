@@ -6,17 +6,14 @@ import {
   TokenWithdrawn
 } from "../generated/XVault/XVault"
 import { VaultBalance } from "../generated/schema"
-import { fetchTokenName, fetchTokenSymbol } from "./ERC20"
+import { fetchTokenName, fetchTokenSymbol, fetchTokenDecimals } from "./ERC20"
 
 function getVaultBalanceId(username: string, token: Bytes): string {
   return username.concat("-").concat(token.toHexString())
 }
 
 export function handleEthDeposited(event: EthDeposited): void {
-  let balanceId = getVaultBalanceId(
-    event.params.username,
-    Bytes.fromHexString("0x0000000000000000000000000000000000000000")
-  )
+  let balanceId = event.params.username
   
   let balance = VaultBalance.load(balanceId)
   if (!balance) {
@@ -25,6 +22,7 @@ export function handleEthDeposited(event: EthDeposited): void {
     balance.token = Bytes.fromHexString("0x0000000000000000000000000000000000000000")
     balance.tokenName = "Ethereum"
     balance.tokenSymbol = "ETH"
+    balance.tokenDecimals = 18
     balance.amount = BigInt.fromI32(0)
     balance.lastUpdatedAt = event.block.timestamp
   }
@@ -35,12 +33,10 @@ export function handleEthDeposited(event: EthDeposited): void {
 }
 
 export function handleEthWithdrawn(event: EthWithdrawn): void {
-  let balanceId = getVaultBalanceId(
-    event.params.username,
-    Bytes.fromHexString("0x0000000000000000000000000000000000000000")
-  )
+  let balanceId = event.params.username
 
   let balance = VaultBalance.load(balanceId)
+  
   if (balance) {
     balance.amount = balance.amount.minus(event.params.amount)
     balance.lastUpdatedAt = event.block.timestamp
@@ -67,13 +63,14 @@ export function handleTokenDeposited(event: TokenDeposited): void {
     balance.amount = BigInt.fromI32(0)
     balance.lastUpdatedAt = event.block.timestamp
 
-    // Fetch token metadata
     if (event.params.token.toHexString() != "0x0000000000000000000000000000000000000000") {
       balance.tokenName = fetchTokenName(event.params.token)
       balance.tokenSymbol = fetchTokenSymbol(event.params.token)
+      balance.tokenDecimals = fetchTokenDecimals(event.params.token)
     } else {
       balance.tokenName = "Ethereum"
       balance.tokenSymbol = "ETH"
+      balance.tokenDecimals = 18
     }
   }
   

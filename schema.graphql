@@ -17,11 +17,11 @@ type VaultBalance @entity {
   id: ID!
   username: String!
   token: Bytes! # address(0) 表示ETH，其他表示ERC20代币地址
-  tokenName: String
-  tokenSymbol: String
+  tokenName: String!
+  tokenSymbol: String!
+  tokenDecimals: Int!
   amount: BigInt!
   lastUpdatedAt: BigInt!
 }
 
 
-#TODO: 监听XVault的余额变化 供用户查询有哪些资产 可以领取的余额

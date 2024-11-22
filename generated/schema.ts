@@ -249,38 +249,43 @@ export class VaultBalance extends Entity {
     this.set("token", Value.fromBytes(value));
   }
 
-  get tokenName(): string | null {
+  get tokenName(): string {
     let value = this.get("tokenName");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toString();
     }
   }
 
-  set tokenName(value: string | null) {
-    if (!value) {
-      this.unset("tokenName");
-    } else {
-      this.set("tokenName", Value.fromString(<string>value));
-    }
+  set tokenName(value: string) {
+    this.set("tokenName", Value.fromString(value));
   }
 
-  get tokenSymbol(): string | null {
+  get tokenSymbol(): string {
     let value = this.get("tokenSymbol");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toString();
     }
   }
 
-  set tokenSymbol(value: string | null) {
-    if (!value) {
-      this.unset("tokenSymbol");
+  set tokenSymbol(value: string) {
+    this.set("tokenSymbol", Value.fromString(value));
+  }
+
+  get tokenDecimals(): i32 {
+    let value = this.get("tokenDecimals");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
     } else {
-      this.set("tokenSymbol", Value.fromString(<string>value));
+      return value.toI32();
     }
+  }
+
+  set tokenDecimals(value: i32) {
+    this.set("tokenDecimals", Value.fromI32(value));
   }
 
   get amount(): BigInt {
