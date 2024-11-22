@@ -49,6 +49,8 @@ dataSources:
           file: ./abis/XVault.json
         - name: XID
           file: ./abis/XID.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: EthDeposited(indexed string,string,uint256)
           handler: handleEthDeposited

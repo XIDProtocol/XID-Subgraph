@@ -6,6 +6,7 @@ import {
   TokenWithdrawn
 } from "../generated/XVault/XVault"
 import { VaultBalance } from "../generated/schema"
+import { fetchTokenName, fetchTokenSymbol } from "./ERC20"
 
 function getVaultBalanceId(username: string, token: Bytes): string {
   return username.concat("-").concat(token.toHexString())
@@ -16,16 +17,18 @@ export function handleEthDeposited(event: EthDeposited): void {
     event.params.username,
     Bytes.fromHexString("0x0000000000000000000000000000000000000000")
   )
-
+  
   let balance = VaultBalance.load(balanceId)
   if (!balance) {
     balance = new VaultBalance(balanceId)
     balance.username = event.params.username
     balance.token = Bytes.fromHexString("0x0000000000000000000000000000000000000000")
+    balance.tokenName = "Ethereum"
+    balance.tokenSymbol = "ETH"
     balance.amount = BigInt.fromI32(0)
     balance.lastUpdatedAt = event.block.timestamp
   }
-
+  
   balance.amount = balance.amount.plus(event.params.amount)
   balance.lastUpdatedAt = event.block.timestamp
   balance.save()
@@ -55,7 +58,7 @@ export function handleTokenDeposited(event: TokenDeposited): void {
     event.params.username,
     event.params.token as Bytes
   )
-
+  
   let balance = VaultBalance.load(balanceId)
   if (!balance) {
     balance = new VaultBalance(balanceId)
@@ -63,8 +66,17 @@ export function handleTokenDeposited(event: TokenDeposited): void {
     balance.token = event.params.token as Bytes
     balance.amount = BigInt.fromI32(0)
     balance.lastUpdatedAt = event.block.timestamp
-  }
 
+    // Fetch token metadata
+    if (event.params.token.toHexString() != "0x0000000000000000000000000000000000000000") {
+      balance.tokenName = fetchTokenName(event.params.token)
+      balance.tokenSymbol = fetchTokenSymbol(event.params.token)
+    } else {
+      balance.tokenName = "Ethereum"
+      balance.tokenSymbol = "ETH"
+    }
+  }
+  
   balance.amount = balance.amount.plus(event.params.amount)
   balance.lastUpdatedAt = event.block.timestamp
   balance.save()

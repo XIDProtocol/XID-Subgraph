@@ -46,6 +46,8 @@ dataSources:
           file: XVault/XVault.json
         - name: XID
           file: XVault/XID.json
+        - name: ERC20
+          file: XVault/ERC20.json
       eventHandlers:
         - event: EthDeposited(indexed string,string,uint256)
           handler: handleEthDeposited

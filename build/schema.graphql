@@ -17,6 +17,8 @@ type VaultBalance @entity {
   id: ID!
   username: String!
   token: Bytes! # address(0) 表示ETH，其他表示ERC20代币地址
+  tokenName: String
+  tokenSymbol: String
   amount: BigInt!
   lastUpdatedAt: BigInt!
 }
