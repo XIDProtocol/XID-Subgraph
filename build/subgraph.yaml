@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: XID
-    network: base
+    network: base-sepolia
     source:
-      address: "0x6a4f7BBACd0d62D586342A938e2d680814e14f0B"
+      address: "0xc05e88184384A62F05AEA9fC4d3365432a93fF96"
       abi: XID
-      startBlock: 20279083
+      startBlock: 18246829
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -18,7 +18,7 @@ dataSources:
         - XIDToken
       abis:
         - name: XID
-          file: XID/abis/XID.json
+          file: XID/XID.json
       eventHandlers:
         - event: Mint(indexed address,indexed uint256,string,uint256)
           handler: handleMint
@@ -27,3 +27,32 @@ dataSources:
         - event: RegistrationRenewed(indexed uint256,uint256,uint256)
           handler: handleRegistrationRenewed
       file: XID/XID.wasm
+  - kind: ethereum/contract
+    name: XVault
+    network: base-sepolia
+    source:
+      address: "0x96F7E2901b60C14dB00f3a0d767C0d46dAd9B2a1"
+      abi: XVault
+      startBlock: 18246829
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - VaultBalance
+      abis:
+        - name: XVault
+          file: XVault/XVault.json
+        - name: XID
+          file: XVault/XID.json
+      eventHandlers:
+        - event: EthDeposited(indexed string,string,uint256)
+          handler: handleEthDeposited
+        - event: EthWithdrawn(indexed string,string,address,uint256)
+          handler: handleEthWithdrawn
+        - event: TokenDeposited(indexed string,string,address,uint256)
+          handler: handleTokenDeposited
+        - event: TokenWithdrawn(indexed string,string,address,address,uint256)
+          handler: handleTokenWithdrawn
+      file: XVault/XVault.wasm

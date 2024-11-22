@@ -3,7 +3,6 @@ type User @entity {
   address: Bytes!
   username: String!
   xidToken: XIDToken!
-  vaultBalances: [VaultBalance!]! @derivedFrom(field: "owner")
 }
 
 type XIDToken @entity {
@@ -16,7 +15,7 @@ type XIDToken @entity {
 
 type VaultBalance @entity {
   id: ID!
-  owner: User!
+  username: String!
   token: Bytes! # address(0) 表示ETH，其他表示ERC20代币地址
   amount: BigInt!
   lastUpdatedAt: BigInt!

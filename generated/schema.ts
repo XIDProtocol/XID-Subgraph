@@ -88,14 +88,6 @@ export class User extends Entity {
   set xidToken(value: string) {
     this.set("xidToken", Value.fromString(value));
   }
-
-  get vaultBalances(): VaultBalanceLoader {
-    return new VaultBalanceLoader(
-      "User",
-      this.get("id")!.toString(),
-      "vaultBalances",
-    );
-  }
 }
 
 export class XIDToken extends Entity {
@@ -231,8 +223,8 @@ export class VaultBalance extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get owner(): string {
-    let value = this.get("owner");
+  get username(): string {
+    let value = this.get("username");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
@@ -240,8 +232,8 @@ export class VaultBalance extends Entity {
     }
   }
 
-  set owner(value: string) {
-    this.set("owner", Value.fromString(value));
+  set username(value: string) {
+    this.set("username", Value.fromString(value));
   }
 
   get token(): Bytes {
@@ -281,23 +273,5 @@ export class VaultBalance extends Entity {
 
   set lastUpdatedAt(value: BigInt) {
     this.set("lastUpdatedAt", Value.fromBigInt(value));
-  }
-}
-
-export class VaultBalanceLoader extends Entity {
-  _entity: string;
-  _field: string;
-  _id: string;
-
-  constructor(entity: string, id: string, field: string) {
-    super();
-    this._entity = entity;
-    this._id = id;
-    this._field = field;
-  }
-
-  load(): VaultBalance[] {
-    let value = store.loadRelated(this._entity, this._id, this._field);
-    return changetype<VaultBalance[]>(value);
   }
 }

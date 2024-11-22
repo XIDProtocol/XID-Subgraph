@@ -74,19 +74,6 @@
     },
     {
         "type": "function",
-        "name": "addSupportedToken",
-        "inputs": [
-            {
-                "name": "token",
-                "type": "address",
-                "internalType": "address"
-            }
-        ],
-        "outputs": [],
-        "stateMutability": "nonpayable"
-    },
-    {
-        "type": "function",
         "name": "clearInactiveBalance",
         "inputs": [
             {
@@ -427,9 +414,15 @@
         "name": "EthDeposited",
         "inputs": [
             {
-                "name": "username",
+                "name": "usernameHash",
                 "type": "string",
                 "indexed": true,
+                "internalType": "string"
+            },
+            {
+                "name": "username",
+                "type": "string",
+                "indexed": false,
                 "internalType": "string"
             },
             {
@@ -446,9 +439,15 @@
         "name": "EthWithdrawn",
         "inputs": [
             {
-                "name": "username",
+                "name": "usernameHash",
                 "type": "string",
                 "indexed": true,
+                "internalType": "string"
+            },
+            {
+                "name": "username",
+                "type": "string",
+                "indexed": false,
                 "internalType": "string"
             },
             {
@@ -540,9 +539,15 @@
         "name": "TokenDeposited",
         "inputs": [
             {
-                "name": "username",
+                "name": "usernameHash",
                 "type": "string",
                 "indexed": true,
+                "internalType": "string"
+            },
+            {
+                "name": "username",
+                "type": "string",
+                "indexed": false,
                 "internalType": "string"
             },
             {
@@ -565,9 +570,15 @@
         "name": "TokenWithdrawn",
         "inputs": [
             {
-                "name": "username",
+                "name": "usernameHash",
                 "type": "string",
                 "indexed": true,
+                "internalType": "string"
+            },
+            {
+                "name": "username",
+                "type": "string",
+                "indexed": false,
                 "internalType": "string"
             },
             {

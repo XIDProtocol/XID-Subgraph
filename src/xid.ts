@@ -1,7 +1,6 @@
 import { Mint, Burn, RegistrationRenewed } from "../generated/XID/XID"
 import { User, XIDToken} from "../generated/schema"
 import { store, BigInt } from "@graphprotocol/graph-ts"
-import { XID } from "../generated/XID/XID"
 
 export function handleMint(event: Mint): void {
   let user = User.load(event.params.user.toHexString())

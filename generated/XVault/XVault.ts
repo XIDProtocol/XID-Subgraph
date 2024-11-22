@@ -23,12 +23,16 @@ export class EthDeposited__Params {
     this._event = event;
   }
 
-  get username(): Bytes {
+  get usernameHash(): Bytes {
     return this._event.parameters[0].value.toBytes();
   }
 
+  get username(): string {
+    return this._event.parameters[1].value.toString();
+  }
+
   get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -45,16 +49,20 @@ export class EthWithdrawn__Params {
     this._event = event;
   }
 
-  get username(): Bytes {
+  get usernameHash(): Bytes {
     return this._event.parameters[0].value.toBytes();
   }
 
+  get username(): string {
+    return this._event.parameters[1].value.toString();
+  }
+
   get to(): Address {
-    return this._event.parameters[1].value.toAddress();
+    return this._event.parameters[2].value.toAddress();
   }
 
   get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -145,16 +153,20 @@ export class TokenDeposited__Params {
     this._event = event;
   }
 
-  get username(): Bytes {
+  get usernameHash(): Bytes {
     return this._event.parameters[0].value.toBytes();
   }
 
+  get username(): string {
+    return this._event.parameters[1].value.toString();
+  }
+
   get token(): Address {
-    return this._event.parameters[1].value.toAddress();
+    return this._event.parameters[2].value.toAddress();
   }
 
   get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -171,20 +183,24 @@ export class TokenWithdrawn__Params {
     this._event = event;
   }
 
-  get username(): Bytes {
+  get usernameHash(): Bytes {
     return this._event.parameters[0].value.toBytes();
   }
 
-  get token(): Address {
-    return this._event.parameters[1].value.toAddress();
+  get username(): string {
+    return this._event.parameters[1].value.toString();
   }
 
-  get to(): Address {
+  get token(): Address {
     return this._event.parameters[2].value.toAddress();
   }
 
+  get to(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+
   get amount(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+    return this._event.parameters[4].value.toBigInt();
   }
 }
 
@@ -595,36 +611,6 @@ export class ConstructorCall__Outputs {
   _call: ConstructorCall;
 
   constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class AddSupportedTokenCall extends ethereum.Call {
-  get inputs(): AddSupportedTokenCall__Inputs {
-    return new AddSupportedTokenCall__Inputs(this);
-  }
-
-  get outputs(): AddSupportedTokenCall__Outputs {
-    return new AddSupportedTokenCall__Outputs(this);
-  }
-}
-
-export class AddSupportedTokenCall__Inputs {
-  _call: AddSupportedTokenCall;
-
-  constructor(call: AddSupportedTokenCall) {
-    this._call = call;
-  }
-
-  get token(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class AddSupportedTokenCall__Outputs {
-  _call: AddSupportedTokenCall;
-
-  constructor(call: AddSupportedTokenCall) {
     this._call = call;
   }
 }
