@@ -46,14 +46,7 @@ export function handleEthWithdrawn(event: EthWithdrawn): void {
   let balance = VaultBalance.load(balanceId)
   
   if (balance) {
-    balance.amount = balance.amount.minus(event.params.amount)
-    balance.lastUpdatedAt = event.block.timestamp
-
-    if (balance.amount.equals(BigInt.fromI32(0))) {
-      store.remove("VaultBalance", balanceId)
-    } else {
-      balance.save()
-    }
+    store.remove("VaultBalance", balanceId)
   }
 }
 
@@ -95,9 +88,6 @@ export function handleTokenWithdrawn(event: TokenWithdrawn): void {
 
   let balance = VaultBalance.load(balanceId)
   if (balance) {
-    balance.amount = BigInt.fromI32(0)
-    balance.lastUpdatedAt = event.block.timestamp
-
     store.remove("VaultBalance", balanceId)
   }
 }
