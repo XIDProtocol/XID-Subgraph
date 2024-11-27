@@ -12,16 +12,3 @@ type XIDToken @entity {
   username: String!
   expirationTime: BigInt!
 }
-
-type VaultBalance @entity {
-  id: ID!
-  username: String!
-  token: Bytes! # address(0) 表示ETH，其他表示ERC20代币地址
-  tokenName: String!
-  tokenSymbol: String!
-  tokenDecimals: Int!
-  amount: BigInt!
-  lastUpdatedAt: BigInt!
-}
-
-
